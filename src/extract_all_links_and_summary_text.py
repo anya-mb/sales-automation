@@ -59,24 +59,9 @@ def find_best_links_for_summary(all_links: List[str], n_links: int = 10) -> List
     llm_links = json.loads(clean_output)
     summary_links = llm_links["useful_links"]
 
+    logging.info(f"Summary links are chosen: {summary_links}")
+
     return summary_links
-
-
-# def get_company_facts(summary: str) -> str:
-#     #
-
-
-# def save_summary_links():
-
-#     summary_links_str_to_save = json.dumps({"summary_links": summary_links})
-
-#     summary_links_filename = 'summary_links.json'
-
-#     file_path_to_save = os.path.join(domain_folder_name, summary_links_filename)
-
-#     # Write the JSON object to a file
-#     with open(file_path_to_save, 'w') as json_file:
-#         json.dump(summary_links_str_to_save, json_file, indent=4)
 
 
 def fetch_html_content_one_url(url: str) -> str:

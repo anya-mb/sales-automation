@@ -89,6 +89,9 @@ def get_all_links(url: str, depth: int = 1) -> List[str]:
         links_to_visit = new_links - visited_links
 
     visited_links.update(links_to_visit)
+
+    logging.info(f"Extracted all links, count: {len(list(visited_links))}")
+
     return list(visited_links)
 
 

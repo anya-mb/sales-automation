@@ -2,7 +2,15 @@ import argparse
 import logging
 from utils import setup_logging
 from get_links_to_scrape import get_all_links
-from utils import save_all_links, save_summary_links
+from utils import (
+    save_all_links,
+    read_all_links,
+    save_summary_links,
+    read_summary_links,
+    get_url_datapath,
+    ALL_LINKS_FILENAME,
+    SUMMARY_LINKS_FILENAME,
+)
 from extract_all_links_and_summary_text import (
     find_best_links_for_summary,
     fetch_html_website_and_summary_content,
@@ -14,6 +22,7 @@ from generative_ai_utils import (
 )
 from linkedin_extraction import get_user_info
 import os
+from typing import List
 
 
 LOG_FILE_PATH = "../logs/get_links_to_scrape.log"
@@ -42,28 +51,6 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def get_url_datapath(url: str, create: bool = True) -> str:
-    # domain_folder_name = get_domain_data_folder(url)
-
-    # # Determine the output directory
-    # domain_folder_name_relative = args.path_to_save or os.path.join(
-    #     "../data", domain_folder_name
-    # )
-    # os.makedirs(domain_folder_name_relative, exist_ok=True)
-
-    # # Extract links and save them to a JSON file
-    # links = get_all_links(args.url, args.depth)
-    # logging.info(
-    #     f"Extracted {len(links)} links from URL: {args.url} with depth: {args.depth}"
-    # )
-
-    # links_data = {"all_links": links}
-    # file_path_to_save = os.path.join(
-    #     domain_folder_name_relative, f"all_links_depth_{args.depth}.json"
-    # )
-    return ""
-
-
 def create_url_datapath(url: str, create: bool = True) -> str:
     # domain_folder_name = get_domain_data_folder(url)
 
@@ -86,6 +73,30 @@ def create_url_datapath(url: str, create: bool = True) -> str:
     return ""
 
 
+def scrape_or_load_all_links(datapath: str, url: str) -> List[str]:
+    # no scraping if scraped
+    if not os.path.exists(os.path.join(datapath, ALL_LINKS_FILENAME)):
+        all_links = get_all_links(url, depth=DEPTH_TO_SCRAPE)
+
+        # Save links to json file
+        save_all_links(datapath, all_links)
+
+    else:
+        all_links = read_all_links(datapath)
+
+    return all_links
+
+
+def create_or_load_summary_links(datapath: str, all_links: List[str]) -> List[str]:
+    if not os.path.exists(os.path.join(datapath, SUMMARY_LINKS_FILENAME)):
+        summary_links = find_best_links_for_summary(all_links)[:N_MAX_SUMMARY_LINKS]
+        save_summary_links(datapath, all_links)
+    else:
+        summary_links = read_summary_links(datapath)
+
+    return summary_links
+
+
 DEPTH_TO_SCRAPE = 2
 N_MAX_SUMMARY_LINKS = 10
 LINKEDIN_LOGIN = ""
@@ -106,14 +117,8 @@ def process():
         os.makedirs(datapath)
         logging.info(f"Directory created: {datapath}")
 
-    all_links = get_all_links(url, depth=DEPTH_TO_SCRAPE)
-
-    # Save links to json file
-    save_all_links(datapath, all_links)
-
-    summary_links = find_best_links_for_summary(all_links)[:N_MAX_SUMMARY_LINKS]
-    logging.info(f"Summary links: {summary_links}")
-    save_summary_links(datapath, all_links)
+    all_links = scrape_or_load_all_links(datapath, url)
+    summary_links = create_or_load_summary_links(datapath, all_links)
 
     website_info, summary_info = fetch_html_website_and_summary_content(
         all_links, summary_links

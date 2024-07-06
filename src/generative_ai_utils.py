@@ -20,12 +20,12 @@ def clean_llm_output(llm_output: str) -> str:
 
 def build_rag(website_info: str, datapath: str) -> bool:
     # save to datapath and rag_directory
-    return False
+    return True
 
 
 def get_facts_and_summary(summary_info: str) -> str:
-    # generates company facts and summary with LLM
-    return ""
+    # generates facts and summary with LLM
+    return "Super facts"
 
 
 def get_presonalised_message(

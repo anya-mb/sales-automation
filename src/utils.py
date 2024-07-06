@@ -6,6 +6,9 @@ import os
 import json
 from typing import List
 
+ALL_LINKS_FILENAME = "all_links.json"
+SUMMARY_LINKS_FILENAME = "summary_links.json"
+
 
 def setup_logging(logfile_path: str):
     """
@@ -40,6 +43,15 @@ def get_domain_data_folder(url: str) -> str:
     return folder_name
 
 
+def get_url_datapath(url: str, create: bool = True) -> str:
+    domain_folder_name = get_domain_data_folder(url)
+
+    # Determine the output directory
+    domain_folder_name_relative = os.path.join("../data", domain_folder_name)
+
+    return domain_folder_name_relative
+
+
 def read_links(filename: str, path: str, dict_key: str) -> List[str]:
     file_path_to_read = os.path.join(path, filename)
 
@@ -53,13 +65,13 @@ def read_links(filename: str, path: str, dict_key: str) -> List[str]:
     return links
 
 
-def read_all_links(filename: str, path: str, dict_key: str = "all_links") -> dict:
+def read_all_links(path: str, dict_key: str = "all_links") -> dict:
+    filename = ALL_LINKS_FILENAME
     return read_links(filename, path, dict_key)
 
 
-def read_summary_links(
-    filename: str, path: str, dict_key: str = "summary_links"
-) -> dict:
+def read_summary_links(path: str, dict_key: str = "summary_links") -> dict:
+    filename = SUMMARY_LINKS_FILENAME
     return read_links(filename, path, dict_key)
 
 
@@ -78,7 +90,7 @@ def save_all_links(
     path: str,
     links: List[str],
     dict_key: str = "all_links",
-    filename: str = "all_links.json",
+    filename: str = ALL_LINKS_FILENAME,
 ) -> None:
     save_links(filename, path, links, dict_key)
 
@@ -87,7 +99,7 @@ def save_summary_links(
     path: str,
     links: List[str],
     dict_key: str = "summary_links",
-    filename: str = "summary_links.json",
+    filename: str = SUMMARY_LINKS_FILENAME,
 ) -> None:
     save_links(filename, path, links, dict_key)
 
