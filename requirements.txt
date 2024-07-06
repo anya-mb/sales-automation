@@ -27,6 +27,7 @@ identify==2.5.36
 idna==3.7
 ipykernel==6.29.4
 ipython==8.26.0
+isort==5.13.2
 jedi==0.19.1
 jsonpatch==1.33
 jsonpointer==3.0.0

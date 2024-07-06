@@ -1,12 +1,13 @@
 import requests
-import json
+
+# import json
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from typing import List, Set
 import os
 import argparse
 import logging
-from utils import setup_logging
+from utils import setup_logging, get_domain_data_folder, save_links
 
 LOG_FILE_PATH = "../logs/get_links_to_scrape.log"
 
@@ -125,25 +126,6 @@ def filter_same_domain_links(links: Set[str], url: str) -> Set[str]:
     return {link for link in links if urlparse(link).netloc == domain}
 
 
-def get_domain_data_folder(url: str) -> str:
-    """
-    Generate a directory name based on the domain of the URL.
-
-    Args:
-        url (str): The URL to derive the directory name from.
-
-    Returns:
-        str: The directory name.
-    """
-    # Replace dots with underscores for the folder name
-    domain = urlparse(url).netloc
-    folder_name = domain.replace(".", "_")
-
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_name, exist_ok=True)
-    return folder_name
-
-
 def main():
     """
     Main function to orchestrate the link extraction and saving process.
@@ -154,11 +136,13 @@ def main():
 
     logging.info(f"Arguments: {args}")
 
+    domain_folder_name = get_domain_data_folder(args.url)
+
     # Determine the output directory
-    domain_folder_name = args.path_to_save or os.path.join(
-        "../data", get_domain_data_folder(args.url)
+    domain_folder_name_relative = args.path_to_save or os.path.join(
+        "../data", domain_folder_name
     )
-    os.makedirs(domain_folder_name, exist_ok=True)
+    os.makedirs(domain_folder_name_relative, exist_ok=True)
 
     # Extract links and save them to a JSON file
     links = get_all_links(args.url, args.depth)
@@ -168,12 +152,11 @@ def main():
 
     links_data = {"all_links": links}
     file_path_to_save = os.path.join(
-        domain_folder_name, f"all_links_depth_{args.depth}.json"
+        domain_folder_name_relative, f"all_links_depth_{args.depth}.json"
     )
 
     # Save links to json file
-    with open(file_path_to_save, "w") as json_file:
-        json.dump(links_data, json_file, indent=4)
+    save_links(file_path_to_save, links_data)
 
     logging.info(f"Saved all links to {file_path_to_save}")
 
