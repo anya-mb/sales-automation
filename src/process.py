@@ -26,6 +26,10 @@ from typing import List
 
 
 LOG_FILE_PATH = "../logs/get_links_to_scrape.log"
+DEPTH_TO_SCRAPE = 2
+N_MAX_SUMMARY_LINKS = 10
+LINKEDIN_LOGIN = ""
+LINKEDIN_PASSWORD = ""
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -97,12 +101,6 @@ def create_or_load_summary_links(datapath: str, all_links: List[str]) -> List[st
     return summary_links
 
 
-DEPTH_TO_SCRAPE = 2
-N_MAX_SUMMARY_LINKS = 10
-LINKEDIN_LOGIN = ""
-LINKEDIN_PASSWORD = ""
-
-
 def process():
     # Parse command-line arguments
     args = parse_arguments()
@@ -111,11 +109,7 @@ def process():
     setup_logging(LOG_FILE_PATH)
     logging.info(f"URL: {url}")
 
-    datapath = get_url_datapath(url)
-
-    if not os.path.exists(datapath):
-        os.makedirs(datapath)
-        logging.info(f"Directory created: {datapath}")
+    datapath = get_url_datapath(url, create=True)
 
     all_links = scrape_or_load_all_links(datapath, url)
     summary_links = create_or_load_summary_links(datapath, all_links)
