@@ -1,13 +1,13 @@
 import os
 from typing import List
 
-from generative_ai_utils import get_company_facts_and_summary
-from scraping.extract_all_links_and_summary_text import (
+from src.generative_ai_utils import get_company_facts_and_summary
+from src.scraping.extract_all_links_and_summary_text import (
     find_best_links_for_summary,
     fetch_html_website_and_summary_content,
 )
-from scraping.get_links_to_scrape import get_all_links
-from utils import *
+from src.scraping.get_links_to_scrape import get_all_links
+from src.utils import *
 
 DEPTH_TO_SCRAPE = 2
 N_MAX_SUMMARY_LINKS = 10

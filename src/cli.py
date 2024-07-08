@@ -1,6 +1,6 @@
 import argparse
 
-from sales_automation import process
+from src.sales_automation import process
 
 
 def parse_arguments() -> argparse.Namespace:

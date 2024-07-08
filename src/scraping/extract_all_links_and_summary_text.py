@@ -5,13 +5,13 @@ import openai
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from dotenv import load_dotenv, find_dotenv
-from generative_ai_utils import clean_llm_output
+from src.generative_ai_utils import clean_llm_output
 import requests
 from bs4 import BeautifulSoup
 
 # from typing import List
 import argparse
-from utils import setup_logging, read_links, save_links
+from src.utils import setup_logging, read_links, save_links
 import logging
 
 

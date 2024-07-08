@@ -20,6 +20,8 @@ LEAD_SUMMARY_FILENAME = "lead_summary.txt"
 
 PERSONALIZED_MESSAGE_FILENAME = "personalized_message.txt"
 
+RELATIVE_FOLDER = "data/"
+
 
 def setup_logging(logfile_path: str):
     """
@@ -56,7 +58,7 @@ def get_url_datapath(url: str, create: bool = True) -> str:
     domain_folder_name = get_domain_data_folder(url)
 
     # Determine the output directory
-    domain_folder_name_relative = os.path.join("../data", domain_folder_name)
+    domain_folder_name_relative = os.path.join(RELATIVE_FOLDER, domain_folder_name)
 
     if create:
         os.makedirs(domain_folder_name_relative, exist_ok=True)

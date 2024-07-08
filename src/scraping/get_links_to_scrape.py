@@ -5,7 +5,7 @@ from typing import List, Set
 import os
 import argparse
 import logging
-from utils import setup_logging, get_domain_data_folder, save_links
+from src.utils import setup_logging, get_domain_data_folder, save_links
 
 LOG_FILE_PATH = "../../logs/get_links_to_scrape.log"
 

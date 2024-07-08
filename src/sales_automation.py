@@ -1,21 +1,21 @@
 import logging
 import os
-from scraping.web_scraper_processor import WebScraperProcessor
-from linkedin_user_processing import get_user_info
-from utils import setup_logging
-from utils import (
+from src.scraping.web_scraper_processor import WebScraperProcessor
+from src.linkedin_user_processing import get_user_info
+from src.utils import (
     LEAD_SUMMARY_AND_FACTS_FILENAME,
     save_lead_summary_and_facts,
     read_lead_summary_and_facts,
+    setup_logging,
 )
-from generative_ai_utils import (
+from src.generative_ai_utils import (
     build_rag,
     get_personalized_message,
     get_lead_facts_and_summary,
 )
 
 
-LOG_FILE_PATH = "../logs/get_links_to_scrape.log"
+LOG_FILE_PATH = "logs/get_links_to_scrape.log"
 
 
 def get_lead_facts(datapath: str, text: str) -> str:
@@ -28,7 +28,7 @@ def get_lead_facts(datapath: str, text: str) -> str:
     return lead_facts_and_summary
 
 
-def process(company_url: str, user_id: str) -> str:
+def process(company_url: str, user_id: str, style: str) -> str:
     setup_logging(LOG_FILE_PATH)
     logging.info(f"Company URL: {company_url}, User ID: {user_id}")
 
@@ -54,7 +54,8 @@ def process(company_url: str, user_id: str) -> str:
         company_facts_and_summary,
         lead_facts_and_summary,
         rag_datapath,
+        style,
     )
-    print(f"Personalised message: {personalised_message}")
+    logging.info(f"Personalised message: {personalised_message}")
 
     return personalised_message

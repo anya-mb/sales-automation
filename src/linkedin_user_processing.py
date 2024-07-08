@@ -2,7 +2,7 @@ from dotenv import load_dotenv, find_dotenv
 import os
 from linkedin_api import Linkedin
 import logging
-from utils import save_lead_summary, read_lead_summary, LEAD_SUMMARY_FILENAME
+from src.utils import save_lead_summary, read_lead_summary, LEAD_SUMMARY_FILENAME
 
 
 _ = load_dotenv(find_dotenv())  # read local .env file

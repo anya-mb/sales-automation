@@ -7,12 +7,12 @@ from langchain_core.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.schema import HumanMessage, SystemMessage
 import logging
-from prompts import (
+from src.prompts import (
     PERSONALIZED_MESSAGE_PROMPT,
     COMPANY_SUMMARY_SYSTEM_PROMPT,
     LEAD_SUMMARY_SYSTEM_PROMPT,
 )
-from utils import (
+from src.utils import (
     save_lead_summary_and_facts,
     read_lead_summary_and_facts,
     LEAD_SUMMARY_AND_FACTS_FILENAME,
@@ -121,7 +121,7 @@ def get_personalized_message(
 
     prompt_template = PromptTemplate.from_template(PERSONALIZED_MESSAGE_PROMPT)
 
-    model = ChatOpenAI(model=llm_model, temperature=0.2)
+    model = ChatOpenAI(model=llm_model, temperature=0.5)
     chain = LLMChain(llm=model, prompt=prompt_template)
     personalized_message = chain.run(
         company_facts_and_summary=company_facts_and_summary,
