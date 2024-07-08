@@ -53,11 +53,12 @@ def get_domain_data_folder(url: str) -> str:
 def get_url_datapath(url: str, create: bool = True) -> str:
     domain_folder_name = get_domain_data_folder(url)
 
-    if create:
-        os.makedirs(domain_folder_name, exist_ok=True)
-
     # Determine the output directory
     domain_folder_name_relative = os.path.join("../data", domain_folder_name)
+
+    if create:
+        os.makedirs(domain_folder_name_relative, exist_ok=True)
+
     logging.info(f"Directory created: {domain_folder_name}")
 
     return domain_folder_name_relative
@@ -113,46 +114,6 @@ def save_summary_links(
     save_links(filename, path, links, dict_key)
 
 
-def save_website_info(path: str, website_info: str):
-    scraped_website_filepath = os.path.join(path, WEBSITE_INFO_FILENAME)
-    with open(scraped_website_filepath, "w") as file:
-        file.write(website_info)
-
-    logging.info(
-        f"Scraped website saved to: {scraped_website_filepath}, file lenght: {len(website_info)}"
-    )
-
-
-def save_summary_info(path: str, summary_info: str):
-    scraped_summary_filepath = os.path.join(path, WEBSITE_SUMMARY_INFO_FILENAME)
-    with open(scraped_summary_filepath, "w") as file:
-        file.write(summary_info)
-
-    logging.info(
-        f"Scraped website summary saved to: {scraped_summary_filepath}, file lenght: {len(summary_info)}"
-    )
-
-
-def read_website_info(path: str) -> str:
-    scraped_website_filepath = os.path.join(path, WEBSITE_INFO_FILENAME)
-    with open(scraped_website_filepath, "r") as file:
-        website_info = file.read()
-
-    logging.info(
-        f"Scraped website read from: {scraped_website_filepath}, file lenght: {len(website_info)}"
-    )
-    return website_info
-
-
-def read_summary_info(path: str) -> str:
-    scraped_summary_filepath = os.path.join(path, WEBSITE_SUMMARY_INFO_FILENAME)
-    with open(scraped_summary_filepath, "r") as file:
-        summary_info = file.read()
-
-    logging.info(f"Scraped website summary read from: {scraped_summary_filepath}")
-    return summary_info
-
-
 def save_txt(path: str, filename: str, text: str):
     full_filepath = os.path.join(path, filename)
     with open(full_filepath, "w") as file:
@@ -168,6 +129,28 @@ def read_txt(path: str, filename: str) -> str:
 
     logging.info(f"Read txt from: {full_filepath}, file lenght: {len(text)}")
 
+    return text
+
+
+def save_website_info(path: str, website_info: str):
+    save_txt(path, WEBSITE_INFO_FILENAME, website_info)
+    logging.info("Saved website info")
+
+
+def save_summary_info(path: str, summary_info: str):
+    save_txt(path, WEBSITE_SUMMARY_INFO_FILENAME, summary_info)
+    logging.info("Saved summary info")
+
+
+def read_website_info(path: str) -> str:
+    text = read_txt(path, WEBSITE_INFO_FILENAME)
+    logging.info("Read website info")
+    return text
+
+
+def read_summary_info(path: str) -> str:
+    text = read_txt(path, WEBSITE_SUMMARY_INFO_FILENAME)
+    logging.info("Read website summary info")
     return text
 
 
