@@ -16,6 +16,8 @@ WEBSITE_SUMMARY_INFO_FILENAME = "website_summary_info.txt"
 COMPANY_SUMMARY_AND_FACTS_FILENAME = "company_summary_and_facts.txt"
 LEAD_SUMMARY_AND_FACTS_FILENAME = "lead_summary_and_facts.txt"
 
+LEAD_SUMMARY_FILENAME = "_lead_summary.txt"
+
 
 def setup_logging(logfile_path: str):
     """
@@ -173,4 +175,17 @@ def save_lead_summary_and_facts(path: str, text: str):
 def read_lead_summary_and_facts(path: str) -> str:
     text = read_txt(path, LEAD_SUMMARY_AND_FACTS_FILENAME)
     logging.info("Read lead summary and facts")
+    return text
+
+
+def save_lead_summary(path, lead_facts_and_summary, user_id) -> None:
+    lead_filename = user_id + LEAD_SUMMARY_FILENAME
+    save_txt(path, lead_filename, lead_facts_and_summary)
+    logging.info("Saved lead_facts_and_summary")
+
+
+def read_lead_summary(path, user_id) -> str:
+    lead_filename = user_id + LEAD_SUMMARY_FILENAME
+    text = read_txt(path, lead_filename)
+    logging.info("Read lead_facts_and_summary")
     return text

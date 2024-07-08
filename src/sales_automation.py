@@ -1,6 +1,7 @@
 import logging
 
 from scraping.web_scraper_processor import WebScraperProcessor
+from linkedin_extraction import get_user_info
 from utils import setup_logging
 from utils import (
     # save_company_summary_and_facts,
@@ -52,12 +53,19 @@ def process(url: str) -> str:
 
     company_facts_and_summary = web_scraper_processor.get_company_facts()
 
-    # lead_info = get_user_info(LINKEDIN_LOGIN, LINKEDIN_PASSWORD)
+    user_id = "andrew-huberman"
 
-    lead_facts_and_summary = ""  # get_lead_facts_and_summary(datapath, lead_info)
+    lead_info = get_user_info(user_id)
+
+    lead_facts_and_summary = get_lead_facts_and_summary(
+        web_scraper_processor.datapath, lead_info, user_id
+    )
 
     personalised_message = get_presonalised_message(
-        company_facts_and_summary, lead_facts_and_summary, rag_datapath
+        web_scraper_processor.datapath,
+        company_facts_and_summary,
+        lead_facts_and_summary,
+        rag_datapath,
     )
     print(f"Personalised message: {personalised_message}")
 
