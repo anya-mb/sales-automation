@@ -2,6 +2,7 @@
 
 ## 🎯 Transform Your Sales Strategy with AI-Powered Personalization!
 
+
 Welcome to the **Personalized Sales Message Generator** repository! This cutting-edge tool is designed to help sales professionals craft engaging, customized sales messages based on detailed company insights and LinkedIn user profiles. Harnessing the power of OpenAI’s GPT models and Langchain, this tool brings a new level of personalization and efficiency to your sales outreach.
 
 ## 🔍 What is it?
@@ -15,7 +16,7 @@ Our **Personalized Sales Message Generator** takes your target company's website
 - **LinkedIn Integration**: Utilize LinkedIn user IDs to craft messages that address your prospects’ unique needs and interests.
 - **Easy to Use**: Streamlined setup and intuitive interface for seamless integration into your sales process.
 
-
+<img width="683" alt="example" src="https://github.com/anya-mb/sales-automation/assets/47106377/d5a77d6f-28d0-423c-8d68-6ed0ecc6f5b6">
 
 ## 👨‍💻 Setup
 
