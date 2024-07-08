@@ -1,6 +1,4 @@
 import logging
-
-# import re
 from urllib.parse import urlparse
 import os
 import json
@@ -13,7 +11,10 @@ ALL_LINKS_DICT_KEY = "all_links"
 SUMMARY_DICT_KEY = "summary_links"
 
 WEBSITE_INFO_FILENAME = "website_info.txt"
-WEBSITE_SUMMARY_INDO_FILENAME = "website_summary_info.txt"
+WEBSITE_SUMMARY_INFO_FILENAME = "website_summary_info.txt"
+
+COMPANY_SUMMARY_AND_FACTS_FILENAME = "company_summary_and_facts.txt"
+LEAD_SUMMARY_AND_FACTS_FILENAME = "lead_summary_and_facts.txt"
 
 
 def setup_logging(logfile_path: str):
@@ -123,7 +124,7 @@ def save_website_info(path: str, website_info: str):
 
 
 def save_summary_info(path: str, summary_info: str):
-    scraped_summary_filepath = os.path.join(path, WEBSITE_SUMMARY_INDO_FILENAME)
+    scraped_summary_filepath = os.path.join(path, WEBSITE_SUMMARY_INFO_FILENAME)
     with open(scraped_summary_filepath, "w") as file:
         file.write(summary_info)
 
@@ -143,8 +144,8 @@ def read_website_info(path: str) -> str:
     return website_info
 
 
-def read_summary_info(path: str):
-    scraped_summary_filepath = os.path.join(path, WEBSITE_SUMMARY_INDO_FILENAME)
+def read_summary_info(path: str) -> str:
+    scraped_summary_filepath = os.path.join(path, WEBSITE_SUMMARY_INFO_FILENAME)
     with open(scraped_summary_filepath, "r") as file:
         summary_info = file.read()
 
@@ -152,16 +153,41 @@ def read_summary_info(path: str):
     return summary_info
 
 
-# def read_website_info(path: str) -> str:
-#     scraped_website_filepath = os.path.join(path, 'website_info.txt')
-#     try:
-#         with open(scraped_website_filepath, 'r') as file:
-#             website_info = file.read()
-#         logging.info(f"Scraped website read from: {scraped_website_filepath}")
-#         return website_info
-#     except FileNotFoundError as fnf_error:
-#         logging.error(f"File not found: {scraped_website_filepath}")
-#         raise fnf_error
-#     except Exception as e:
-#         logging.error(f"An error occurred while reading the file: {e}")
-#         raise e
+def save_txt(path: str, filename: str, text: str):
+    full_filepath = os.path.join(path, filename)
+    with open(full_filepath, "w") as file:
+        file.write(text)
+
+    logging.info(f"Saved txt to: {full_filepath}, file lenght: {len(text)}")
+
+
+def read_txt(path: str, filename: str) -> str:
+    full_filepath = os.path.join(path, filename)
+    with open(full_filepath, "r") as file:
+        text = file.read()
+
+    logging.info(f"Read txt from: {full_filepath}, file lenght: {len(text)}")
+
+    return text
+
+
+def save_company_summary_and_facts(path: str, text: str):
+    save_txt(path, COMPANY_SUMMARY_AND_FACTS_FILENAME, text)
+    logging.info("Saved company summary and facts")
+
+
+def read_company_summary_and_facts(path: str) -> str:
+    text = read_txt(path, COMPANY_SUMMARY_AND_FACTS_FILENAME)
+    logging.info("Read company summary and facts")
+    return text
+
+
+def save_lead_summary_and_facts(path: str, text: str):
+    save_txt(path, LEAD_SUMMARY_AND_FACTS_FILENAME, text)
+    logging.info("Saved lead summary and facts")
+
+
+def read_lead_summary_and_facts(path: str) -> str:
+    text = read_txt(path, LEAD_SUMMARY_AND_FACTS_FILENAME)
+    logging.info("Read lead summary and facts")
+    return text

@@ -5,7 +5,7 @@ import openai
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from dotenv import load_dotenv, find_dotenv
-from generative_ai_utils import SUMMARY_SYSTEM_PROMPT, clean_llm_output
+from generative_ai_utils import clean_llm_output
 import requests
 from bs4 import BeautifulSoup
 
@@ -21,6 +21,14 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 LOG_FILE_PATH = "../logs/extract_all_links_and_summary_text.log"
 
 LLM_MODEL = "gpt-3.5-turbo"
+
+SUMMARY_SYSTEM_PROMPT = """I'm scraping website to learn more about the product it offers, what are the benefits of using it and what are the competitive advantages of this company or its products.
+
+Help me decide what 10 links out of all links should I scrape, put the most useful links first, I'll send you links. Return the JSON with key "useful_links" and value is list of links.
+
+My life depends on this. I will tip you generously if you follow the instructions and do a great job. Only return the JSON with key "useful_links" and value is list of links, no other text is needed.
+
+"""
 
 
 def parse_arguments() -> argparse.Namespace:

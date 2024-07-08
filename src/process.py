@@ -10,6 +10,18 @@ from utils import (
     get_url_datapath,
     ALL_LINKS_FILENAME,
     SUMMARY_LINKS_FILENAME,
+    WEBSITE_INFO_FILENAME,
+    WEBSITE_SUMMARY_INFO_FILENAME,
+    save_website_info,
+    save_summary_info,
+    read_website_info,
+    read_summary_info,
+    save_company_summary_and_facts,
+    read_company_summary_and_facts,
+    COMPANY_SUMMARY_AND_FACTS_FILENAME,
+    LEAD_SUMMARY_AND_FACTS_FILENAME,
+    save_lead_summary_and_facts,
+    read_lead_summary_and_facts,
 )
 from extract_all_links_and_summary_text import (
     find_best_links_for_summary,
@@ -17,10 +29,12 @@ from extract_all_links_and_summary_text import (
 )
 from generative_ai_utils import (
     build_rag,
-    get_facts_and_summary,
     get_presonalised_message,
+    get_company_facts_and_summary,
+    get_lead_facts_and_summary,
 )
-from linkedin_extraction import get_user_info
+
+# from linkedin_extraction import get_user_info
 import os
 from typing import List
 
@@ -55,28 +69,6 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def create_url_datapath(url: str, create: bool = True) -> str:
-    # domain_folder_name = get_domain_data_folder(url)
-
-    # # Determine the output directory
-    # domain_folder_name_relative = args.path_to_save or os.path.join(
-    #     "../data", domain_folder_name
-    # )
-    # os.makedirs(domain_folder_name_relative, exist_ok=True)
-
-    # # Extract links and save them to a JSON file
-    # links = get_all_links(args.url, args.depth)
-    # logging.info(
-    #     f"Extracted {len(links)} links from URL: {args.url} with depth: {args.depth}"
-    # )
-
-    # links_data = {"all_links": links}
-    # file_path_to_save = os.path.join(
-    #     domain_folder_name_relative, f"all_links_depth_{args.depth}.json"
-    # )
-    return ""
-
-
 def scrape_or_load_all_links(datapath: str, url: str) -> List[str]:
     # no scraping if scraped
     if not os.path.exists(os.path.join(datapath, ALL_LINKS_FILENAME)):
@@ -101,6 +93,47 @@ def create_or_load_summary_links(datapath: str, all_links: List[str]) -> List[st
     return summary_links
 
 
+def fetch_or_load_html_website_and_summary_content(
+    datapath: str, all_links: List[str], summary_links: List[str]
+) -> tuple[str, str]:
+
+    if not os.path.exists(
+        os.path.join(datapath, WEBSITE_INFO_FILENAME)
+    ) or os.path.exists(os.path.join(datapath, WEBSITE_SUMMARY_INFO_FILENAME)):
+
+        website_info, summary_info = fetch_html_website_and_summary_content(
+            all_links, summary_links
+        )
+        save_website_info(datapath, website_info)
+        save_summary_info(datapath, summary_info)
+
+    else:
+        website_info = read_website_info(datapath)
+        summary_info = read_summary_info(datapath)
+
+    return website_info, summary_info
+
+
+def get_or_load_company_facts(datapath: str, text: str) -> str:
+    if not os.path.exists(os.path.join(datapath, COMPANY_SUMMARY_AND_FACTS_FILENAME)):
+        company_facts_and_summary = get_company_facts_and_summary(text)
+        save_company_summary_and_facts(datapath, company_facts_and_summary)
+    else:
+        company_facts_and_summary = read_company_summary_and_facts(datapath)
+
+    return company_facts_and_summary
+
+
+def get_or_load_lead_facts(datapath: str, text: str) -> str:
+    if not os.path.exists(os.path.join(datapath, LEAD_SUMMARY_AND_FACTS_FILENAME)):
+        lead_facts_and_summary = get_lead_facts_and_summary(text)
+        save_lead_summary_and_facts(datapath, lead_facts_and_summary)
+    else:
+        lead_facts_and_summary = read_lead_summary_and_facts(datapath)
+
+    return lead_facts_and_summary
+
+
 def process():
     # Parse command-line arguments
     args = parse_arguments()
@@ -114,8 +147,8 @@ def process():
     all_links = scrape_or_load_all_links(datapath, url)
     summary_links = create_or_load_summary_links(datapath, all_links)
 
-    website_info, summary_info = fetch_html_website_and_summary_content(
-        all_links, summary_links
+    website_info, summary_info = fetch_or_load_html_website_and_summary_content(
+        datapath, all_links, summary_links
     )
 
     rag_datapath = build_rag(website_info, datapath)
@@ -123,11 +156,11 @@ def process():
     if not rag_datapath:
         raise FileNotFoundError
 
-    company_facts_and_summary = get_facts_and_summary(summary_info)
+    company_facts_and_summary = get_or_load_company_facts(datapath, summary_info)
 
-    lead_info = get_user_info(LINKEDIN_LOGIN, LINKEDIN_PASSWORD)
+    # lead_info = get_user_info(LINKEDIN_LOGIN, LINKEDIN_PASSWORD)
 
-    lead_facts_and_summary = get_facts_and_summary(lead_info)
+    lead_facts_and_summary = ""  # get_lead_facts_and_summary(datapath, lead_info)
 
     personalised_message = get_presonalised_message(
         company_facts_and_summary, lead_facts_and_summary, rag_datapath

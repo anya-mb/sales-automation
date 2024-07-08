@@ -1,6 +1,4 @@
 import requests
-
-# import json
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from typing import List, Set
