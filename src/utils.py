@@ -16,7 +16,9 @@ WEBSITE_SUMMARY_INFO_FILENAME = "website_summary_info.txt"
 COMPANY_SUMMARY_AND_FACTS_FILENAME = "company_summary_and_facts.txt"
 LEAD_SUMMARY_AND_FACTS_FILENAME = "lead_summary_and_facts.txt"
 
-LEAD_SUMMARY_FILENAME = "_lead_summary.txt"
+LEAD_SUMMARY_FILENAME = "lead_summary.txt"
+
+PERSONALIZED_MESSAGE_FILENAME = "personalized_message.txt"
 
 
 def setup_logging(logfile_path: str):
@@ -47,8 +49,6 @@ def get_domain_data_folder(url: str) -> str:
     domain = urlparse(url).netloc
     folder_name = domain.replace(".", "_")
 
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_name, exist_ok=True)
     return folder_name
 
 
@@ -121,7 +121,7 @@ def save_txt(path: str, filename: str, text: str):
     with open(full_filepath, "w") as file:
         file.write(text)
 
-    logging.info(f"Saved txt to: {full_filepath}, file lenght: {len(text)}")
+    logging.info(f"Saved txt to: {full_filepath}, file length: {len(text)}")
 
 
 def read_txt(path: str, filename: str) -> str:
@@ -129,7 +129,7 @@ def read_txt(path: str, filename: str) -> str:
     with open(full_filepath, "r") as file:
         text = file.read()
 
-    logging.info(f"Read txt from: {full_filepath}, file lenght: {len(text)}")
+    logging.info(f"Read txt from: {full_filepath}, file length: {len(text)}")
 
     return text
 
@@ -167,25 +167,34 @@ def read_company_summary_and_facts(path: str) -> str:
     return text
 
 
-def save_lead_summary_and_facts(path: str, text: str):
-    save_txt(path, LEAD_SUMMARY_AND_FACTS_FILENAME, text)
+def save_lead_summary_and_facts(user_folder: str, text: str):
+    save_txt(user_folder, LEAD_SUMMARY_AND_FACTS_FILENAME, text)
     logging.info("Saved lead summary and facts")
 
 
-def read_lead_summary_and_facts(path: str) -> str:
-    text = read_txt(path, LEAD_SUMMARY_AND_FACTS_FILENAME)
+def read_lead_summary_and_facts(user_folder: str) -> str:
+    text = read_txt(user_folder, LEAD_SUMMARY_AND_FACTS_FILENAME)
     logging.info("Read lead summary and facts")
     return text
 
 
-def save_lead_summary(path, lead_facts_and_summary, user_id) -> None:
-    lead_filename = user_id + LEAD_SUMMARY_FILENAME
-    save_txt(path, lead_filename, lead_facts_and_summary)
-    logging.info("Saved lead_facts_and_summary")
+def save_lead_summary(user_folder: str, lead_facts_and_summary: str) -> None:
+    save_txt(user_folder, LEAD_SUMMARY_FILENAME, lead_facts_and_summary)
+    logging.info("Saved lead facts and summary")
 
 
-def read_lead_summary(path, user_id) -> str:
-    lead_filename = user_id + LEAD_SUMMARY_FILENAME
-    text = read_txt(path, lead_filename)
-    logging.info("Read lead_facts_and_summary")
+def read_lead_summary(user_folder: str) -> str:
+    text = read_txt(user_folder, LEAD_SUMMARY_FILENAME)
+    logging.info("Read lead facts and summary")
+    return text
+
+
+def save_lead_personalized_message(user_folder: str, personalized_message: str) -> None:
+    save_txt(user_folder, PERSONALIZED_MESSAGE_FILENAME, personalized_message)
+    logging.info("Saved lead personalized message")
+
+
+def read_lead_personalized_message(user_folder: str) -> str:
+    text = read_txt(user_folder, PERSONALIZED_MESSAGE_FILENAME)
+    logging.info("Read lead personalized message")
     return text

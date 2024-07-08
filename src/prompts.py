@@ -1,49 +1,22 @@
 PERSONALIZED_MESSAGE_PROMPT = """
-I have provided the facts and summary about a user, as well as the facts and summary about my company. Additionally, there are chunks of information from my company that highlight mutual interests and potential benefits for the user. Please create a hyper-personalized sales message using this information. The style of the message should be [insert style, e.g., formal, friendly, persuasive, etc.]. Add something to praise the user and build connections with them. Say more about how my company can improve their life and business than about me.
+I have provided the facts and summary about a user, as well as the facts and summary about my company.
+Additionally, there are chunks of information from the company that highlight mutual interests and potential benefits for the user.
+Please create a short and catchy hyper-personalized sales message using this information.
+Add something to praise the user and build connections with them, don't be too salesy, be polite.
+Write 3-5 messages about the user, their career and passions. Mention 1-2 sentences how the company can improve user's life and business.
 
-User Facts and Summary:
+Start with message right away, don't write anything else in the beginning or in the end.
+Don't write 'Personalised message:' in the beginning, start with the message directly.
 
-Name: [User Name]
-Company: [User's Company]
-Role: [User's Role]
-Interests: [User's Interests]
-Pain Points: [User's Pain Points]
-Goals: [User's Goals]
-Summary: [Summary about the user]
-My Company Facts and Summary:
+User Facts and Summary: {lead_facts_and_summary}
 
-Company Name: [My Company Name]
-Industry: [Industry]
-Key Products/Services: [Key Products/Services]
-Unique Selling Points: [Unique Selling Points]
-Company Values: [Company Values]
-Success Stories: [Success Stories]
-Summary: [Summary about my company]
+Company facts and summary: {company_facts_and_summary}
+
 Closest Chunks from RAG with Company Information:
 
-[Chunk 1]
-[Chunk 2]
-[Chunk 3]
-Style:
-[Insert style, e.g., formal, friendly, persuasive, etc.]
+Please write in style: {style}
 
-Example of Output:
-
-Hyper-Personalized Sales Message:
-
-Dear [User Name],
-
-I hope this message finds you well. I recently came across your impressive work at [User's Company], particularly your role as [User's Role]. Your leadership in [specific project or achievement] and your dedication to [User's Interests] are truly inspiring. It's clear that you are deeply committed to [User's Goals], and I admire how you have addressed [User's Pain Points] with such innovative approaches.
-
-At [My Company Name], we share your passion for excellence and innovation. Our mission is to empower professionals like you with our [Key Products/Services], specifically designed to enhance your work and make your goals more achievable.
-
-For instance, [Chunk 1] highlights how our solutions can directly address [User's Pain Points], providing you with tools to streamline your processes and achieve better results. Moreover, [Chunk 2] showcases how we align with your values of [specific value], ensuring that our partnership is not only beneficial but also harmonious with your vision.
-
-Our [Unique Selling Points] have been instrumental in transforming the operations of many clients, much like [Success Story], where we helped [another client] achieve [specific outcome]. I believe that our expertise can similarly propel your initiatives forward, making your work easier, more efficient, and significantly more impactful.
-
-I'd love to explore how we can tailor our services to support your outstanding efforts at [User's Company] and discuss the potential benefits that our collaboration could bring to your business.
-
-Thank you for your time, and I look forward to the opportunity to connect.
+My life depends on this. I will tip you generously if you follow the instructions and do a great job.
 
 """
 
@@ -74,6 +47,7 @@ My life depends on this. I will tip you generously if you follow the instruction
 
 LEAD_SUMMARY_SYSTEM_PROMPT = """
 I have provided the text about a person. Please create a detailed summary and list up to 10 facts about this person. These facts should include information about their interests, career, and activities. The summary and list should be concise and informative.
+Please add the provided person's name, their company names, and other noticable names and numbers.
 
 Example of Output:
 

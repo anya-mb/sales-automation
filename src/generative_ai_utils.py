@@ -3,6 +3,8 @@ import os
 import openai
 from dotenv import load_dotenv, find_dotenv
 from langchain_openai import ChatOpenAI
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain
 from langchain.schema import HumanMessage, SystemMessage
 import logging
 from prompts import (
@@ -10,7 +12,15 @@ from prompts import (
     COMPANY_SUMMARY_SYSTEM_PROMPT,
     LEAD_SUMMARY_SYSTEM_PROMPT,
 )
-from utils import LEAD_SUMMARY_FILENAME, save_lead_summary, read_lead_summary
+from utils import (
+    save_lead_summary_and_facts,
+    read_lead_summary_and_facts,
+    LEAD_SUMMARY_AND_FACTS_FILENAME,
+    save_lead_personalized_message,
+)
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 _ = load_dotenv(find_dotenv())  # read local .env file
@@ -82,50 +92,48 @@ def get_company_facts_and_summary(text: str) -> str:
     company_facts_and_summary = get_facts_and_summary(
         text, COMPANY_SUMMARY_SYSTEM_PROMPT
     )
-    logging.info("Created company_facts_and_summary")
+    # logging.info("Created company_facts_and_summary")
     return company_facts_and_summary
 
 
 def get_lead_facts_and_summary(path: str, text: str, user_id: str) -> str:
-    if not os.path.exists(os.path.join(path, "user_id" + LEAD_SUMMARY_FILENAME)):
+    user_folder = os.path.join(path, user_id)
+
+    if not os.path.exists(os.path.join(user_folder, LEAD_SUMMARY_AND_FACTS_FILENAME)):
         lead_facts_and_summary = get_facts_and_summary(text, LEAD_SUMMARY_SYSTEM_PROMPT)
-        save_lead_summary(path, lead_facts_and_summary, user_id)
+        save_lead_summary_and_facts(user_folder, lead_facts_and_summary)
         logging.info("Created lead_facts_and_summary")
     else:
-        lead_facts_and_summary = read_lead_summary(path, user_id)
+        lead_facts_and_summary = read_lead_summary_and_facts(user_folder)
         logging.info("Read lead_facts_and_summary")
 
     return lead_facts_and_summary
 
 
-def get_presonalised_message(
+def get_personalized_message(
     path: str,
+    user_id: str,
     company_facts_and_summary: str,
     lead_facts_and_summary: str,
     rag_datapath: str,
     style="friendly",
 ) -> str:
-    message = (
-        f"Company facts and summary:\n{company_facts_and_summary}\n"
-        + f"User Facts and Summary:\n{lead_facts_and_summary}\n"
-        + f"Style:\n{style}"
+
+    prompt_template = PromptTemplate.from_template(PERSONALIZED_MESSAGE_PROMPT)
+
+    model = ChatOpenAI(model=llm_model, temperature=0.2)
+    chain = LLMChain(llm=model, prompt=prompt_template)
+    personalized_message = chain.run(
+        company_facts_and_summary=company_facts_and_summary,
+        lead_facts_and_summary=lead_facts_and_summary,
+        style=style,
     )
-
-    text = truncate_to_context_window(message)
-
-    chat = ChatOpenAI(
-        temperature=0.2,
-        model=llm_model,
-    )
-
-    result = chat.invoke(
-        [SystemMessage(content=PERSONALIZED_MESSAGE_PROMPT), HumanMessage(content=text)]
-    )
-
-    personalized_message = result.content
 
     logging.info(
         f"Created personalized message with LLM, size: {len(personalized_message)}"
     )
+
+    user_folder = os.path.join(path, user_id)
+    save_lead_personalized_message(user_folder, personalized_message)
 
     return personalized_message
