@@ -20,9 +20,6 @@ def parse_arguments() -> argparse.Namespace:
         help="URL to find links on and save them",
     )
     parser.add_argument(
-        "--depth", type=int, default=2, help="The depth to go to find links to scrape"
-    )
-    parser.add_argument(
         "--user_id",
         type=str,
         default="andrew-huberman",
