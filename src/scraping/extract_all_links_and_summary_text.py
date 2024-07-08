@@ -18,7 +18,7 @@ import logging
 _ = load_dotenv(find_dotenv())  # read local .env file
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
-LOG_FILE_PATH = "../logs/extract_all_links_and_summary_text.log"
+LOG_FILE_PATH = "../../logs/extract_all_links_and_summary_text.log"
 
 LLM_MODEL = "gpt-3.5-turbo"
 

@@ -7,7 +7,7 @@ import argparse
 import logging
 from utils import setup_logging, get_domain_data_folder, save_links
 
-LOG_FILE_PATH = "../logs/get_links_to_scrape.log"
+LOG_FILE_PATH = "../../logs/get_links_to_scrape.log"
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -141,7 +141,7 @@ def main():
 
     # Determine the output directory
     domain_folder_name_relative = args.path_to_save or os.path.join(
-        "../data", domain_folder_name
+        "../../data", domain_folder_name
     )
     os.makedirs(domain_folder_name_relative, exist_ok=True)
 

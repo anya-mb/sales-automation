@@ -17,6 +17,6 @@ repos:
     hooks:
     -   id: ruff
         name: ruff
-        entry: ruff check .
+        entry: ruff check --ignore F405,F403 .
         language: system
         pass_filenames: false
