@@ -25,6 +25,12 @@ def parse_arguments() -> argparse.Namespace:
         default="andrew-huberman",
         help="User ID to write personalized message to",
     )
+    parser.add_argument(
+        "--style",
+        type=str,
+        default="Professional",
+        help="Style of a personalized message",
+    )
 
     return parser.parse_args()
 
@@ -33,7 +39,8 @@ def run():
     args = parse_arguments()
     url = args.url
     user_id = args.user_id
-    process(url, user_id)
+    style = args.style
+    process(url, user_id, style)
 
 
 if __name__ == "__main__":
