@@ -100,7 +100,7 @@ LINKEDIN_PASSWORD=
 
 ## 🕺🏼 Run
 
-To run streamlit frontend for text chat:
+To run streamlit frontend for the app:
 ```
 streamlit run app.py
 ```
