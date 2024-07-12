@@ -124,6 +124,7 @@ def fetch_html_website_and_summary_content(
 
     for link in all_links:
         html_content = fetch_html_content_one_url(link)
+        html_content += " \n "
         website_info += html_content
 
         if link in summary_links:
