@@ -104,3 +104,6 @@ To run streamlit frontend for the app:
 ```
 streamlit run app.py
 ```
+
+You can now view the Streamlit app in your browser at local URL: [http://localhost:8501](http://localhost:8501)
+
