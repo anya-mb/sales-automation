@@ -40,7 +40,8 @@ This solution can be applied to any other business as well!
 
 ## How does it work?
 
-![diagram](https://github.com/user-attachments/assets/ca3f2658-3090-40ba-bc15-58ba8706fc87)
+![The sales automation company](https://github.com/user-attachments/assets/b9009c26-c21b-4bf8-8efe-e942453ef8f4)
+
 
 ### Data Mining
 1. Customer Provides URL: The sales automation company's customer provides a URL.
