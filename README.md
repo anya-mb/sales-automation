@@ -17,7 +17,48 @@ Our **Personalized Sales Message Generator** takes your target company's website
 - **Easy to Use**: Streamlined setup and intuitive interface for seamless integration into your sales process.
 
 ## 🤩 How it looks like?
-<img width="683" alt="example" src="https://github.com/anya-mb/sales-automation/assets/47106377/d5a77d6f-28d0-423c-8d68-6ed0ecc6f5b6">
+### 🎓💻 Sales messages for an educational company / University / online courses:
+<img width="668" alt="Friendly" src="https://github.com/user-attachments/assets/607f5b0d-f882-495d-864a-d933f5571b90">
+
+
+### 💡🤖 Sales messages for an innovative software company:
+<img width="665" alt="professional" src="https://github.com/user-attachments/assets/d40efe88-6a10-4b2e-aea5-f4713c03ede9">
+
+### 🏋️‍♂️🧘‍♂️ Sales messages for a fitness company:
+<img width="684" alt="fitness" src="https://github.com/user-attachments/assets/78a371ac-8574-4b91-8817-d524296b7117">
+
+### 💼📈 Sales messages for a sales company:
+<img width="679" alt="Intriguing" src="https://github.com/user-attachments/assets/28b3050b-0a44-4b20-b52c-0fee6efa41f8">
+
+
+### 🛍️🍰 Sales messages for a retail company / cafe:
+<img width="673" alt="bakery" src="https://github.com/user-attachments/assets/942e2c79-98b4-4db6-9afe-33b547010ce4">
+
+
+This solution can be applied to any other business as well!
+
+
+## How does it work?
+
+![diagram](https://github.com/user-attachments/assets/ca3f2658-3090-40ba-bc15-58ba8706fc87)
+
+### Data Mining
+1. Customer Provides URL: The sales automation company's customer provides a URL.
+2. Crawl Website: The sales automation company crawls the provided website to extract texts.
+3. Extract Texts from Website: The extracted texts are processed and summarized using a large language model (LLM).
+4. Store Summarized Data: The summarized data, including the URL, company name, summary, and top facts, is stored in the Facts DB.
+5. Calculate Embeddings: The extracted texts are chunked, and embeddings are calculated and stored in a Vector DB (RAG).
+
+### Personalized Message Generation
+1. Fetch LinkedIn Data: The sales automation company fetches data from the LinkedIn profile of the customer’s lead.
+2. Extract Facts from LinkedIn: Facts from the LinkedIn profile are extracted.
+3. Calculate Embeddings: Embeddings for these facts are calculated.
+4. Find Closest Chunks: The closest chunks from the Vector DB (RAG) are found using the embeddings.
+5. Generate Prompt: Using the facts and information about the person, a summary of the company, and relevant chunks, a prompt is generated.
+6. Evaluate Output: The generated message is evaluated to ensure it matches the template (mentions customer and their facts, connections, style, etc.).
+7. Send to Customer: The final personalized message is sent to the customer.
+
+
 
 ## 👨‍💻 Setup
 
