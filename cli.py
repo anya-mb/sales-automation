@@ -31,6 +31,12 @@ def parse_arguments() -> argparse.Namespace:
         default="Professional",
         help="Style of a personalized message",
     )
+    parser.add_argument(
+        "--additional_notes",
+        type=str,
+        default="Mention a 10% promotion next week",
+        help="Company's additional otes to mention in sales message",
+    )
 
     return parser.parse_args()
 
@@ -40,7 +46,8 @@ def run():
     url = args.url
     user_id = args.user_id
     style = args.style
-    process(url, user_id, style)
+    additional_notes = args.additional_notes
+    process(url, user_id, style, additional_notes)
 
 
 if __name__ == "__main__":

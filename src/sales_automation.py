@@ -9,7 +9,6 @@ from src.utils import (
     setup_logging,
 )
 from src.generative_ai_utils import (
-    build_rag,
     get_personalized_message,
     get_lead_facts_and_summary,
 )
@@ -39,7 +38,7 @@ def get_lead_facts(datapath: str, text: str) -> str:
     return lead_facts_and_summary
 
 
-def process(company_url: str, user_id: str, style: str) -> str:
+def process(company_url: str, user_id: str, style: str, additional_notes: str) -> str:
     """
     Process company and user information to generate a personalized message.
 
@@ -47,6 +46,7 @@ def process(company_url: str, user_id: str, style: str) -> str:
         company_url (str): URL of the company's website.
         user_id (str): ID of the user (e.g., LinkedIn ID).
         style (str): Style of the personalized message.
+        additional_notes (str)
 
     Returns:
         str: Personalized message generated based on input parameters.
@@ -62,13 +62,6 @@ def process(company_url: str, user_id: str, style: str) -> str:
     # Get data path from web scraper processor
     datapath = web_scraper_processor.datapath
 
-    # Build RAG model using website info and data path
-    rag_datapath = build_rag(web_scraper_processor.website_info, datapath)
-
-    # Raise exception if RAG data path is not available
-    if not rag_datapath:
-        raise FileNotFoundError("RAG model data not found")
-
     # Get company facts and summary from web scraper processor
     company_facts_and_summary = web_scraper_processor.get_company_facts()
 
@@ -79,14 +72,14 @@ def process(company_url: str, user_id: str, style: str) -> str:
     lead_facts_and_summary = get_lead_facts_and_summary(datapath, lead_info, user_id)
 
     # Generate personalized message using data path, user ID, company facts and summary,
-    # lead facts and summary, RAG data path, and style
+    # lead facts and summary, style and additional_notes
     personalised_message = get_personalized_message(
         datapath,
         user_id,
         company_facts_and_summary,
         lead_facts_and_summary,
-        rag_datapath,
         style,
+        additional_notes,
     )
 
     logging.info(f"Personalised message: {personalised_message}")
